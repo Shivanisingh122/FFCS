@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Management Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .search-controls {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .classroom-table {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .classroom-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .classroom-table tbody tr:hover {
+            background-color: #f1f8ff;
+        }
+        .btn-group {
+            margin-right: 10px;
+        }
+        .action-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .no-classrooms-message {
+            font-size: 1.2em;
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Classroom Management</h2>
+        <div class="search-controls">
+            <div class="row action-group">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search by room number or block">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success btn-block" id="searchBtn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a class="btn btn-success btn-block" id="addClassroom" href="/admin/add-classroom">
+                        <i class="fas fa-building"></i> Add Classroom
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="noClassroomsMessage" class="no-classrooms-message" style="display: none;">
+            No matching classrooms found.
+        </div>
+
+        <table class="table table-striped table-bordered classroom-table" id="classroomTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Room Number</th>
+                    <th>Block</th>
+                    <th>Capacity</th>
+                    <th>Type</th>
+                    <th>Facilities</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (classrooms && classrooms.length > 0) { %>
+                    <% classrooms.forEach(classroom => { %>
+                        <tr>
+                            <td><%= classroom.roomNumber %></td>
+                            <td><%= classroom.block %></td>
+                            <td><%= classroom.capacity %></td>
+                            <td><%= classroom.type %></td>
+                            <td><%= classroom.facilities.join(', ') %></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function updateTableVisibility() {
+                if ($('#classroomTable tbody tr').length === 0) {
+                    $('#classroomTable').hide();
+                    $('#noClassroomsMessage').show();
+                } else {
+                    $('#classroomTable').show();
+                    $('#noClassroomsMessage').hide();
+                }
+            }
+
+            $('#searchBtn').click(function() {
+                const searchValue = $('#searchInput').val().trim();
+
+                if (searchValue === '') {
+                    $('#noClassroomsMessage').text('Please enter search criteria.');
+                    $('#noClassroomsMessage').show();
+                    $('#classroomTable').hide();
+                } else {
+                    // Perform actual search logic here and populate the table
+                    // For demonstration, let's assume no results found after search
+                    $('#classroomTable tbody').empty();
+                    $('#noClassroomsMessage').text('No matching classrooms found.');
+                    updateTableVisibility();
+                }
+            });
+
+            // Initially check table visibility
+            updateTableVisibility();
+        });
+    </script>
+</body>
+</html>

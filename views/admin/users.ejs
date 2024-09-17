@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .search-controls {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .user-table {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .user-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .user-table tbody tr:hover {
+            background-color: #f1f8ff;
+        }
+        .btn-group {
+            margin-right: 10px;
+        }
+        .action-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .no-users-message {
+            font-size: 1.2em;
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">User Search Details</h2>
+        <div class="search-controls">
+            <div class="row action-group">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select class="form-control" id="userType" required>
+                                <option value="">Select User Type</option>
+                                <option value="admin">Admin</option>
+                                <option value="faculty">Faculty</option>
+                                <option value="student">Student</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search by name, email, or system ID">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success btn-block" id="searchBtn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a class="btn btn-success btn-block" id="addUser" href="/admin/add-user">
+                        <i class="fas fa-user-plus"></i> Add User
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="noUsersMessage" class="no-users-message" style="display: none;">
+            No matching user found.
+        </div>
+
+        <table class="table table-striped table-bordered user-table" id="userTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>System ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>User Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (users && users.length > 0) { %>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td><%= user.systemId %></td>
+                            <td><%= user.name %></td>
+                            <td><%= user.email %></td>
+                            <td><%= user.type %></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function updateTableVisibility() {
+                if ($('#userTable tbody tr').length === 0) {
+                    $('#userTable').hide();
+                    $('#noUsersMessage').show();
+                } else {
+                    $('#userTable').show();
+                    $('#noUsersMessage').hide();
+                }
+            }
+
+            $('#searchBtn').click(function() {
+                const searchValue = $('#searchInput').val().trim();
+                const userType = $('#userType').val();
+
+                if (searchValue === '' && userType === '') {
+                    $('#noUsersMessage').text('Please enter search criteria or select a user type.');
+                    $('#noUsersMessage').show();
+                    $('#userTable').hide();
+                } else {
+                    // Perform actual search logic here and populate the table
+                    // For demonstration, let's assume no results found after search
+                    $('#userTable tbody').empty();
+                    $('#noUsersMessage').text('No matching user found.');
+                    updateTableVisibility();
+                }
+            });
+
+            
+
+            // Initially check table visibility
+            updateTableVisibility();
+        });
+    </script>
+</body>
+</html>

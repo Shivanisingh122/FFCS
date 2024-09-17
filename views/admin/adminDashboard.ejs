@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FFCS</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="/css/dashboard.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>FFCS-Admin</h3>
+            </div>
+            <ul class="list-unstyled components">
+                <li class="<%= locals.currentPage === 'dashboard' ? 'active' : '' %>">
+                    <a href="/admin/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                </li>
+                <li class="<%= locals.currentPage === 'users' ? 'active' : '' %>">
+                    <a href="/admin/users"><i class="fas fa-user-plus"></i> Users</a>
+                </li>
+                <li class="<%= locals.currentPage === 'courses' ? 'active' : '' %>">
+                    <a href="/admin/courses"><i class="fas fa-book"></i> Courses</a>
+                </li>
+                <li class="<%= locals.currentPage === 'slots' ? 'active' : '' %>">
+                    <a href="/admin/slots"><i class="fas fa-plus"></i> Slots</a>
+                </li>
+                <li class="<%= locals.currentPage === 'classrooms' ? 'active' : '' %>">
+                    <a href="/admin/classrooms"><i class="fas fa-building"></i> Classrooms</a>
+                </li>
+                <li class="<%= locals.currentPage === 'course-allotment' ? 'active' : '' %>">
+                    <a href="/admin/course-allotment"><i class="fas fa-clipboard-list"></i> Course Allotment</a>
+                </li>
+                <!-- <li class="<%= locals.currentPage === 'profile' ? 'active' : '' %>"></li>
+                    <a href="/admin/profile"><i class="fas fa-user"></i> Profile</a>
+                </li> -->
+                <!-- Add more menu items as needed -->
+            </ul>
+
+            <div class="sidebar-footer">
+                <a href="/admin/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </div>
+        </nav>
+
+        <div id="content">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <button type="button" id="sidebarCollapse" class="btn btn-info">
+                    <i class="fas fa-align-left"></i>
+                </button>
+                <div class="ml-auto">
+                    <span class="navbar-text">Welcome, <%= adminName %></span>
+                </div>
+            </nav>
+
+            <div class="container-fluid dashboard-content">
+                <h2 class="mt-4">
+                    <%= locals.pageTitle %>
+                </h2>
+                <!-- Add the error message block here -->
+                <% if (typeof errorMessage !=='undefined' ) { %>
+                    <div class="alert alert-danger">
+                        <%= errorMessage %>
+                    </div>
+                    <% } %>
+
+                        <% if (locals.currentPage==='dashboard' ) { %>
+                            <!-- Dashboard content -->
+                            <div class="row mt-4">
+                                <div class="col-md-3">
+                                    <div class="card text-white bg-primary mb-3">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Total Courses</h5>
+                                            <p class="card-text display-4">
+                                                <%= locals.totalCourses || 0 %>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add more dashboard cards here -->
+                            </div>
+                            <% } else if (locals.currentPage==='users' ) { %>
+                                <%- include('users', { users: users }) %>
+                                    <% } else if (locals.currentPage==='addUser' ) { %>
+                                        <%- include('addUser') %>
+                                            <% } else if (locals.currentPage==='courses' ) { %>
+                                                <%- include('../academics/courseList', { courses: courses }) %>
+                                                    <% } else if (locals.currentPage==='addCourse' ) { %>
+                                                        <%- include('../academics/addCourse') %>
+                                                            <% } else if (locals.currentPage==='slots' ) { %>
+                                                                <%- include('../academics/slotList', { slots: slots })
+                                                                    %>
+                                                                    <% } else if (locals.currentPage==='addSlot' ) { %>
+                                                                        <%- include('../academics/addSlot') %>
+                                                                            <% } else if
+                                                                                (locals.currentPage==='classrooms' ) {
+                                                                                %>
+                                                                                <%- include('../academics/classroomList',
+                                                                                    { classrooms: classrooms }) %>
+                                                                                    <% } else if
+                                                                                        (locals.currentPage==='addClassroom'
+                                                                                        ) { %>
+                                                                                        <%- include('../academics/addClassroom')
+                                                                                            %>
+                                                                                            <% } else if
+                                                                                                (locals.currentPage==='course-allotment'
+                                                                                                ) { %>
+                                                                                                <%- include('courseAllotment',
+                                                                                                    { courseAllotments:
+                                                                                                    courseAllotments })
+                                                                                                    %>
+                                                                                                    <% } else if
+                                                                                                        (locals.currentPage==='addCourseAllotment'
+                                                                                                        ) { %>
+                                                                                                        <%- include('addCourseAllotment')
+                                                                                                            %>
+                                                                                                            <% } %>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('#content').toggleClass('active');
+            });
+        });
+    </script>
+</body>
+
+</html>

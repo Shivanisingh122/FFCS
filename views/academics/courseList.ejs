@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Management Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        .search-controls {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .course-table {
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        .course-table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .course-table tbody tr:hover {
+            background-color: #f1f8ff;
+        }
+        .btn-group {
+            margin-right: 10px;
+        }
+        .action-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .no-courses-message {
+            font-size: 1.2em;
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Course Management</h2>
+        <div class="search-controls">
+            <div class="row action-group">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search by course name or code">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-success btn-block" id="searchBtn">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-right">
+                    <a class="btn btn-success btn-block" id="addCourse" href="/admin/add-course">
+                        <i class="fas fa-book"></i> Add Course
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="noCoursesMessage" class="no-courses-message" style="display: none;">
+            No matching courses found.
+        </div>
+
+        <table class="table table-striped table-bordered course-table" id="courseTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Allocated Seats</th>
+                    <th>Course Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (courses && courses.length > 0) { %>
+                    <% courses.forEach(course => { %>
+                        <tr>
+                            <td><%= course.courseCode %></td>
+                            <td><%= course.courseName %></td>
+                            <td><%= course.credit %></td>
+                            <td><%= course.allocatedSeats %></td>
+                            <td><%= course.courseType %></td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function updateTableVisibility() {
+                if ($('#courseTable tbody tr').length === 0) {
+                    $('#courseTable').hide();
+                    $('#noCoursesMessage').show();
+                } else {
+                    $('#courseTable').show();
+                    $('#noCoursesMessage').hide();
+                }
+            }
+
+            $('#searchBtn').click(function() {
+                const searchValue = $('#searchInput').val().trim();
+
+                if (searchValue === '') {
+                    $('#noCoursesMessage').text('Please enter search criteria.');
+                    $('#noCoursesMessage').show();
+                    $('#courseTable').hide();
+                } else {
+                    // Perform actual search logic here and populate the table
+                    // For demonstration, let's assume no results found after search
+                    $('#courseTable tbody').empty();
+                    $('#noCoursesMessage').text('No matching courses found.');
+                    updateTableVisibility();
+                }
+            });
+
+            // Initially check table visibility
+            updateTableVisibility();
+        });
+    </script>
+</body>
+</html>

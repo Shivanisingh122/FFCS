@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Course Allotment</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin-top: 30px;
+        }
+        h2 {
+            color: #343a40;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+        .form-control, .form-select {
+            border-radius: 8px;
+            border: 1px solid #ced4da;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.25);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 12px 20px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+        .btn-primary:focus, .btn-primary:active {
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add Course Allotment</h2>
+        <form action="/admin/add-course-allotment" method="POST">
+            <div class="mb-3">
+                <label for="courseCode" class="form-label">Course</label>
+                <select class="form-select" id="courseCode" name="course" required>
+                    <option value="">Select a course</option>
+                    <% courses.forEach(function(course) { %>
+                        <option value="<%= course._id %>"><%= course.courseCode %> - <%= course.courseName %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="faculty" class="form-label">Faculty</label>
+                <select class="form-select" id="faculty" name="faculty" required>
+                    <option value="">Select a faculty</option>
+                    <% facultyList.forEach(function(faculty) { %>
+                        <option value="<%= faculty._id %>"><%= faculty.name %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="slot" class="form-label">Slot</label>
+                <select class="form-select" id="slot" name="slot" required>
+                    <option value="">Select a slot</option>
+                    <% slots.forEach(function(slot) { %>
+                        <option value="<%= slot._id %>"><%= slot.code %> - <%= slot.type %> - <%= slot.day %> - <%= slot.startTime %> - <%= slot.endTime %> </option>
+                    <% }); %>
+
+                </select>
+            </div>
+            
+            <div class="mb-3">
+                <label for="room" class="form-label">Room</label>
+                <select class="form-select" id="room" name="room" required>
+                    <option value="">Select a room</option>
+                    <% rooms.forEach(function(room) { %>
+                        <option value="<%= room._id %>"><%= room.roomNumber %> - Block <%= room.block %></option>
+                    <% }); %>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Course Allotment</button>
+        </form>
+
+        
+    </div>
+</body>
+</html>
